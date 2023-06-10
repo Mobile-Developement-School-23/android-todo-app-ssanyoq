@@ -1,7 +1,6 @@
 package com.example.yatodo
 
 import java.time.LocalDate
-import java.util.Date
 import java.util.function.Predicate
 
 enum class Importance {
@@ -12,9 +11,9 @@ data class TodoItem (
     var taskId: String,
     var taskText: String,
     var importance: Importance,
-    var withDeadline: bool, // TODO
+    var withDeadline: Boolean, // TODO
     var deadlineDate: LocalDate,
-    var isCompleted: bool,
+    var isCompleted: Boolean,
     var creationDate: LocalDate,
     var changeDate: LocalDate, // TODO
 )
