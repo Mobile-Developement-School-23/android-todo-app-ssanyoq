@@ -12,15 +12,24 @@ data class TodoItem (
     var taskText: String,
     var importance: Importance,
     var withDeadline: Boolean, // TODO
-    var deadlineDate: LocalDate,
+    var deadlineDate: LocalDate?,
     var isCompleted: Boolean,
     var creationDate: LocalDate,
-    var changeDate: LocalDate, // TODO
+    var changeDate: LocalDate?, // TODO
 )
 
 class TodoItemsRepository {
     var todoItemsList : MutableList<TodoItem> = mutableListOf()
+    private operator fun set(i: Int, value: TodoItem) {
+        todoItemsList[i] = value
+    }
+    operator fun get(i: Int): TodoItem {
+        return todoItemsList[i]
+    }
 
+    fun getTodoItems(): MutableList<TodoItem> {
+        return this.todoItemsList
+    }
     fun addItem(newItem: TodoItem) {
         this.todoItemsList.add(newItem)
     }
@@ -30,9 +39,8 @@ class TodoItemsRepository {
     fun generate() {
         val i1:TodoItem = TodoItem(taskId = "aaa",
             taskText = "Please buy milk I beg you", isCompleted = false,
-            withDeadline = false, creationDate = LocalDate.now(),
-            changeDate = LocalDate.now(), deadlineDate = LocalDate.now(),
-            importance = Importance.HIGH)
+            withDeadline = false, creationDate = LocalDate.now(), deadlineDate = LocalDate.now(),
+            importance = Importance.HIGH, changeDate = null)
         val i2:TodoItem
         val i3:TodoItem
         val i4:TodoItem
