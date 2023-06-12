@@ -4,6 +4,7 @@ import android.view.View
 import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import org.w3c.dom.Text
 import java.time.LocalDate
@@ -18,5 +19,26 @@ class TodoItemViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         taskDescription.text = todoItem.taskText // TODO text cutting
         checkBox.isChecked = todoItem.isCompleted
         deadLineDate.text = todoItem.deadlineDate.toString() // TODO
+        when (todoItem.importance) {
+            Importance.LOW -> {
+                importanceIndicator.setImageDrawable(
+                    ContextCompat.getDrawable(
+                        itemView.context,
+                        R.drawable.arrow_down
+                    )
+                )
+            }
+            Importance.MEDIUM -> {
+                // No drawables, just empty space
+            }
+            Importance.HIGH -> {
+                importanceIndicator.setImageDrawable(
+                    ContextCompat.getDrawable(
+                        itemView.context,
+                        R.drawable.double_exclamation
+                    )
+                )
+            }
+        }
     }
 }

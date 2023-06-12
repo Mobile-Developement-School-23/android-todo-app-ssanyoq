@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="white">#FFFFFFFF</color>
+    <color name="red">#FF453A</color>
+    <color name="green">#32D74B</color>
+    <color name="blue">#0A84FF</color>
+    <color name="gray">#8E8E93</color>
+    <color name="gray_light">#48484A</color>
+    <color name="separator">#FFFFFF</color> <!-- 20%  -->
+    <color name="overlay">#000000</color> <!--32%  -->
+    <color name="label">#FFFFFF</color>
+    <color name="back_primary">#161618</color>
+    <color name="back_secondary">#252528</color>
+    <color name="back_elevated">#3C3C3F</color>
+</resources>

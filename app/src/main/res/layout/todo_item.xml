@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <CheckBox
         android:id="@+id/checkbox"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:layout_marginStart="19dp"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
         <!--        TODO color -->
     <ImageView
         android:id="@+id/importance_indicator"
@@ -21,7 +22,6 @@
         app:layout_constraintEnd_toStartOf="@id/task_description"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:src="@drawable/arrow_down"
         android:contentDescription="@string/importance_indicator" />
     <TextView
         android:id="@+id/task_description"
@@ -30,8 +30,9 @@
         android:lineHeight="20dp"
         android:textSize="16sp"
         android:text="Hello world\neee\neeee"
+        android:textColor="@color/label"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="14dp"
+        android:layout_marginTop="10dp"
         android:layout_marginBottom="14dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -41,11 +42,16 @@
         android:id="@+id/deadline_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="14dp"
+        android:textSize="14sp"
+        android:lineHeight="20sp"
+
         app:layout_constraintTop_toBottomOf="@id/task_description"
         app:layout_constraintStart_toStartOf="@id/task_description"
         android:text="Date placeholder"
-        android:textColor="#6A6A6A" />
+        android:textColor="@color/label"
+        android:alpha=".6" />
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
