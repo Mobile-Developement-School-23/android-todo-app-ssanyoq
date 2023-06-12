@@ -1,4 +1,4 @@
-package com.example.yatodo
+package com.example.yatodo.recycler
 
 import android.view.View
 import android.widget.CheckBox
@@ -6,8 +6,9 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import org.w3c.dom.Text
-import java.time.LocalDate
+import com.example.yatodo.data.Importance
+import com.example.yatodo.R
+import com.example.yatodo.data.TodoItem
 
 class TodoItemViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
     private val taskDescription: TextView = itemView.findViewById(R.id.task_description)

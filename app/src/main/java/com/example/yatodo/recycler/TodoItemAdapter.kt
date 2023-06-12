@@ -1,10 +1,12 @@
-package com.example.yatodo
+package com.example.yatodo.recycler
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.yatodo.R
+import com.example.yatodo.data.TodoItem
 
-class TodoItemAdapter: RecyclerView.Adapter<TodoItemViewHolder>() {
+class TodoItemAdapter : RecyclerView.Adapter<TodoItemViewHolder>() {
     var todoItems = mutableListOf<TodoItem>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TodoItemViewHolder {
@@ -17,6 +19,7 @@ class TodoItemAdapter: RecyclerView.Adapter<TodoItemViewHolder>() {
             )
         )
     }
+
     override fun getItemCount(): Int {
         return todoItems.size
     }
