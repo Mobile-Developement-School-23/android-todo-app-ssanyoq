@@ -43,3 +43,7 @@ class TodoItemViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         }
     }
 }
+
+class AddItemViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+
+}

@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">YaTODO</string>
+    <string name="todo_label">Todo List</string>
+    <string name="tasks_done">Done</string>
+    <string name="info_button">Info button</string>
+    <string name="importance_indicator">Importance indicator</string>
+    <string name="add_new">New task</string>
 </resources>
