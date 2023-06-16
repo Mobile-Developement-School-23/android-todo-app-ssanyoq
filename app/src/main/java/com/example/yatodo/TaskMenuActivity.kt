@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.view.View
+import android.widget.DatePicker
 import android.widget.PopupMenu
 import android.widget.TextView
 import androidx.appcompat.content.res.AppCompatResources
@@ -13,6 +14,10 @@ import androidx.core.content.ContextCompat
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import org.w3c.dom.Text
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class TaskMenuActivity : AppCompatActivity() {
 
@@ -71,7 +76,7 @@ class TaskMenuActivity : AppCompatActivity() {
         val constraintsBuilder = CalendarConstraints.Builder()
             .setStart(MaterialDatePicker.todayInUtcMilliseconds())
         val datePicker = MaterialDatePicker.Builder.datePicker()
-            .setTitleText("Yo")
+            .setTitleText("Pick Deadline date")
             .setSelection(
                 MaterialDatePicker.todayInUtcMilliseconds()
             )
@@ -81,13 +86,19 @@ class TaskMenuActivity : AppCompatActivity() {
             .build()
 
         // Date picker call
+        val datePickerIndicator = findViewById<TextView>(R.id.datepicker_indicator)
         val datePickerButton = findViewById<SwitchCompat>(R.id.toggle_date_button)
-        datePickerButton.setOnClickListener {it as SwitchCompat
+        datePickerButton.setOnClickListener { it ->
+            it as SwitchCompat
             if (it.isChecked) {
                 datePicker.show(supportFragmentManager, "tag")
-                datePicker.addOnCancelListener {
-                    println("hey")
+                datePicker.addOnPositiveButtonClickListener {it2 ->
+                    val date = Date(it2)
+                    val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.US)
+                    datePickerIndicator.text = sdf.format(date)
                 }
+            } else {
+                datePickerIndicator.text = ""
             }
         }
     }

@@ -1,17 +1,17 @@
 package com.example.yatodo.data
 
-import java.time.LocalDate
+import java.util.Date
 
 enum class Importance {
-    LOW, MEDIUM, HIGH
+    LOW, COMMON, HIGH
 }
 
 data class TodoItem(
     var taskId: String,
-    var taskText: String,
+    var text: String,
     var importance: Importance,
-    var deadlineDate: LocalDate?,
+    var deadline: Date?,
     var isCompleted: Boolean,
-    var creationDate: LocalDate,
-    var changeDate: LocalDate?,
+    var createdAt: Date,
+    var modifiedAt: Date?,
 )

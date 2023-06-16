@@ -19,17 +19,13 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         val todoItemsRepository = TodoItemsRepository()
         todoItemsRepository.generate()
-        val fragmentOne = FragmentMain()
-        val bundle = Bundle()
-        fragmentOne.arguments = Bundle()
-
 
         val todoItemsRecyclerView = findViewById<RecyclerView>(R.id.todo_items)
         val todoItemAdapter = TodoItemAdapter()
         val layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         todoItemsRecyclerView.adapter = todoItemAdapter
         todoItemsRecyclerView.layoutManager = layoutManager
-        todoItemAdapter.todoItems = todoItemsRepository.getTodoItems() // (this)?
+        todoItemAdapter.todoItems = todoItemsRepository.getTodoItems()
 
         val appBarLayout = findViewById<AppBarLayout>(R.id.app_bar_layout)
         val motionLayout = findViewById<MotionLayout>(R.id.toolbar)
