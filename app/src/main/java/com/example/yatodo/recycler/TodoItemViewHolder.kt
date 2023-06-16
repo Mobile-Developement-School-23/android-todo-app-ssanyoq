@@ -1,5 +1,7 @@
 package com.example.yatodo.recycler
 
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.view.View
 import android.widget.CheckBox
 import android.widget.ImageView
@@ -9,17 +11,24 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.yatodo.data.Importance
 import com.example.yatodo.R
 import com.example.yatodo.data.TodoItem
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
-class TodoItemViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+class TodoItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val taskDescription: TextView = itemView.findViewById(R.id.task_description)
     private val checkBox: CheckBox = itemView.findViewById(R.id.checkbox)
     private val importanceIndicator: ImageView = itemView.findViewById(R.id.importance_indicator)
     private val deadLineDate: TextView = itemView.findViewById(R.id.deadline_date)
 
     fun onBind(todoItem: TodoItem) {
-        taskDescription.text = todoItem.taskText // TODO text cutting
+        taskDescription.text = todoItem.taskText
         checkBox.isChecked = todoItem.isCompleted
-        deadLineDate.text = todoItem.deadlineDate.toString() // TODO
+
+        if (deadLineDate.text == null) {
+            deadLineDate.visibility = View.GONE
+        } else {
+            deadLineDate.text = todoItem.deadlineDate.toString()
+        }
+
         when (todoItem.importance) {
             Importance.LOW -> {
                 importanceIndicator.setImageDrawable(
@@ -29,9 +38,11 @@ class TodoItemViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
                     )
                 )
             }
+
             Importance.MEDIUM -> {
                 // No drawables, just empty space
             }
+
             Importance.HIGH -> {
                 importanceIndicator.setImageDrawable(
                     ContextCompat.getDrawable(
@@ -39,11 +50,18 @@ class TodoItemViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
                         R.drawable.double_exclamation
                     )
                 )
+                checkBox.buttonTintList =
+                    ColorStateList.valueOf(ContextCompat.getColor(itemView.context, R.color.red))
             }
         }
     }
 }
 
-class AddItemViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
-
+class AddItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    val addButton = itemView.findViewById<FloatingActionButton>(R.id.add_btn)
+    fun onBind() {
+        addButton.setOnClickListener {
+            println("bop")
+        }
+    }
 }
