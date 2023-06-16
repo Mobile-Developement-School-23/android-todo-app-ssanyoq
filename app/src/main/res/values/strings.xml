@@ -5,4 +5,10 @@
     <string name="info_button">Info button</string>
     <string name="importance_indicator">Importance indicator</string>
     <string name="add_new">New task</string>
+    <string name="save">Save</string>
+    <string name="task_description_hing">Should do something…</string>
+    <string name="importance">Importance</string>
+    <string name="importance_none">None</string>
+    <string name="importance_low">Low</string>
+    <string name="importance_high">High</string>
 </resources>

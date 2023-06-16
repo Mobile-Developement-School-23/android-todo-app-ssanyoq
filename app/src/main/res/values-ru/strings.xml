@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Ясделал</string>
+    <string name="todo_label">Список дел</string>
+    <string name="tasks_done">Выполнено</string>
+    <string name="add_new">Новое</string>
+    <string name="save">Сохранить</string>
+    <string name="info_button">Info button</string>
+    <string name="importance_indicator">Importance indicator</string>
+    <string name="task_description_hing">Надо бы что-нибудь сделать…</string>
+    <string name="importance">Важность</string>
+    <string name="importance_none">None</string>
+    <string name="importance_low">Low</string>
+    <string name="importance_high">High</string>
+</resources>
