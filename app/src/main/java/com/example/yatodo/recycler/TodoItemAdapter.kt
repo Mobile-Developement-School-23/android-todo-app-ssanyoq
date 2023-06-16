@@ -85,15 +85,9 @@ class TodoItemAdapter : RecyclerView.Adapter<ViewHolder>() {
 
         if (holder.checkBox.isChecked) {
             holder.taskDescription.paintFlags = (Paint.STRIKE_THRU_TEXT_FLAG)
-            holder.checkBox.buttonTintList = ColorStateList.valueOf(
-                ContextCompat.getColor(
-                    holder.itemView.context,
-                    R.color.green
-                )
-            )
         }
 
-        if (holder.deadLineDate.text == null) {
+        if (todoItem.deadline == null) {
             holder.deadLineDate.visibility = View.GONE
         } else {
             val sdf = SimpleDateFormat("dd.MM.yyyy", Locale.US)
