@@ -3,13 +3,13 @@ package com.example.yatodo
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.ImageView
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.constraintlayout.motion.widget.MotionLayout
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.yatodo.recycler.TodoItemAdapter
 import com.google.android.material.appbar.AppBarLayout
-import com.example.yatodo.TaskMenuActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.imageview.ShapeableImageView
 
@@ -17,8 +17,12 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        var todoItemsRepository = TodoItemsRepository()
+        val todoItemsRepository = TodoItemsRepository()
         todoItemsRepository.generate()
+        val fragmentOne = FragmentMain()
+        val bundle = Bundle()
+        fragmentOne.arguments = Bundle()
+
 
         val todoItemsRecyclerView = findViewById<RecyclerView>(R.id.todo_items)
         val todoItemAdapter = TodoItemAdapter()
@@ -34,11 +38,36 @@ class MainActivity : AppCompatActivity() {
             motionLayout.progress = seekPosition
         }
 
-        val btn = findViewById<ShapeableImageView>(R.id.visibilityIcon)
-        btn.setOnClickListener {
+        // New item button handling
+        val newItemButton = findViewById<FloatingActionButton>(R.id.new_item_button)
+        newItemButton.setOnClickListener {
             openTaskMenuActivity()
         }
+
+        // Visibility button handling
+        var isVisibilityTurnedOn = true
+        val visibilityButton = findViewById<ShapeableImageView>(R.id.visibilityIcon)
+        visibilityButton.setOnClickListener {
+            if (isVisibilityTurnedOn) {
+                visibilityButton.setImageDrawable(
+                    AppCompatResources.getDrawable(
+                        this,
+                        R.drawable.visibility_off
+                    )
+                )
+            } else {
+                visibilityButton.setImageDrawable(
+                    AppCompatResources.getDrawable(
+                        this,
+                        R.drawable.visibility
+                    )
+                )
+            }
+            isVisibilityTurnedOn = !isVisibilityTurnedOn
+
+        }
     }
+
     fun openTaskMenuActivity() {
         val intent = Intent(this, TaskMenuActivity::class.java)
         startActivity(intent)
