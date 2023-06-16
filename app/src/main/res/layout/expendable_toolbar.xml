@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/motion_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:minHeight="72dp"
+    app:layoutDescription="@xml/expendable_toolbar_scene"
+    app:layout_scrollFlags="scroll|snap|exitUntilCollapsed">
+
+    <View
+        android:id="@+id/toolbar_background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:elevation="0dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/main_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:text="@string/todo_label"
+        android:textAppearance="?attr/textAppearanceDisplaySmall"
+        android:textColor="?colorOnBackground"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.139"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/helper_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/tasks_done"
+        android:textAppearance="?attr/textAppearanceHeadlineSmall"
+        android:textColor="#c0ffee"
+        android:visibility="visible"
+        app:layout_constraintStart_toStartOf="@id/main_text"
+        app:layout_constraintTop_toBottomOf="@id/main_text" />
+
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/visibilityIcon"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_gravity="center"
+        android:layout_marginHorizontal="16dp"
+        android:tint="@color/blue"
+        app:layout_constraintBottom_toBottomOf="@+id/helper_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/helper_text"
+        app:srcCompat="@drawable/double_exclamation_" />
+
+</androidx.constraintlayout.motion.widget.MotionLayout>
