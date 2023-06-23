@@ -39,7 +39,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@id/importance_indicator"
-        />
+        tools:ignore="HardcodedText" />
     <TextView
         android:id="@+id/deadline_date"
         android:layout_width="wrap_content"
@@ -53,17 +53,18 @@
         app:layout_constraintStart_toStartOf="@id/task_description"
         android:text="Date placeholder"
         android:textColor="@color/label"
-        android:alpha=".6" />
+        android:alpha=".6"
+        tools:ignore="HardcodedText" />
     <ImageButton
         android:id="@+id/info_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="14dp"
+        android:layout_marginEnd="30dp"
         android:src="@drawable/info_button"
         android:background="?attr/selectableItemBackgroundBorderless"
         app:tint="#9E9E9E"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf= "@id/task_description"
+        app:layout_constraintEnd_toEndOf="parent"
         android:contentDescription="@string/info_button" />
 </androidx.constraintlayout.widget.ConstraintLayout>
