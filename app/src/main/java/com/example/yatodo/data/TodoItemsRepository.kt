@@ -60,7 +60,9 @@ class TodoItemsRepository() // TODO
     @MainThread
     fun updateTodoItems() {
         // TODO
-        Log.e("TodoItemsRepository", "Please make update function")
+        val tmp = TodoItemsRepository()
+        tmp.generate()
+        _todoItemsList = tmp.todoItemsList as MutableLiveData<List<TodoItem>>
     }
 
     fun addItem(todoItem: TodoItem) {
