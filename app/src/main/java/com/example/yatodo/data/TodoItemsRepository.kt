@@ -9,7 +9,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 
-class TodoItemsRepository() // TODO
+class TodoItemsRepository(private val dataSource: NetworkDataResource)
 {
     private var _todoItemsList = MutableLiveData<List<TodoItem>>(emptyList())
 
@@ -58,11 +58,9 @@ class TodoItemsRepository() // TODO
     }
 
     @MainThread
-    fun updateTodoItems() {
-        // TODO
-        val tmp = TodoItemsRepository()
-        tmp.generate()
-        _todoItemsList = tmp.todoItemsList as MutableLiveData<List<TodoItem>>
+    suspend fun updateTodoItems() {
+        val loadedData = withContext(Dispatchers.IO) {dataSource.loadTasks()}
+        _todoItemsList.value = loadedData
     }
 
     fun addItem(todoItem: TodoItem) {
