@@ -1,15 +1,19 @@
 package com.example.yatodo
 
+import android.os.Build
 import android.os.Bundle
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.view.View
+import android.widget.EditText
 import android.widget.PopupMenu
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.widget.SwitchCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import com.example.yatodo.data.TodoItem
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -21,14 +25,19 @@ class TaskFragment() : Fragment(R.layout.task_fragment) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val closeButton = view.findViewById<FloatingActionButton>(R.id.close_button)
+        val importancePopup = view.findViewById<TextView>(R.id.popup_button)
+        val datePickerIndicator = view.findViewById<TextView>(R.id.datepicker_indicator)
+        val datePickerButton = view.findViewById<SwitchCompat>(R.id.toggle_date_button)
+        val taskDescription = view.findViewById<EditText>(R.id.task_description)
+        val saveButton = view.findViewById<FloatingActionButton>(R.id.save_button)
+
         closeButton.setOnClickListener {
             parentFragmentManager.popBackStack()
         }
 
         // Popup menu handling
-        val popupTextView = view.findViewById<TextView>(R.id.popup_button)
-        popupTextView.setOnClickListener {
-            val popupMenu = PopupMenu(this.requireContext(), popupTextView)
+        importancePopup.setOnClickListener {
+            val popupMenu = PopupMenu(this.requireContext(), importancePopup)
             popupMenu.menuInflater.inflate(R.menu.popup_menu, popupMenu.menu)
             popupMenu.setForceShowIcon(true)
 
@@ -54,13 +63,13 @@ class TaskFragment() : Fragment(R.layout.task_fragment) {
             popupMenu.setOnMenuItemClickListener { item ->
                 when (item.itemId) {
                     R.id.importance_none ->
-                        popupTextView.text = item.title
+                        importancePopup.text = item.title
 
                     R.id.importance_low ->
-                        popupTextView.text = item.title
+                        importancePopup.text = item.title
 
                     R.id.importance_high ->
-                        popupTextView.text = item.title
+                        importancePopup.text = item.title
                 }
                 true
             }
@@ -81,8 +90,7 @@ class TaskFragment() : Fragment(R.layout.task_fragment) {
             .build()
 
         // Date picker call
-        val datePickerIndicator = view.findViewById<TextView>(R.id.datepicker_indicator)
-        val datePickerButton = view.findViewById<SwitchCompat>(R.id.toggle_date_button)
+
         datePickerButton.setOnClickListener { it ->
             it as SwitchCompat
             if (it.isChecked) {
@@ -96,5 +104,13 @@ class TaskFragment() : Fragment(R.layout.task_fragment) {
                 datePickerIndicator.text = ""
             }
         }
+
+        // setting passed todoItem everywhere
+        val todoItem: TodoItem? = arguments?.getParcelable("todo_item")
+        if (todoItem != null) {
+            taskDescription.setText(todoItem.text, TextView.BufferType.EDITABLE)
+
+        }
+        saveButton.setOnClickListener {  }
     }
 }
