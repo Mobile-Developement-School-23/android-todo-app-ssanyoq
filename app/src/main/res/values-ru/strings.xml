@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name">Ясделал</string>
     <string name="todo_label">Список дел</string>
-    <string name="tasks_done">Выполнено</string>
+    <string name="tasks_done">Выполнено — %d</string>
     <string name="add_new">Новое</string>
     <string name="save">Сохранить</string>
     <string name="info_button">Info button</string>

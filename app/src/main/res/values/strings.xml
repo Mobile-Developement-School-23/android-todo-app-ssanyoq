@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">YaTODO</string>
     <string name="todo_label">Todo List</string>
-    <string name="tasks_done">Done</string>
+    <string name="tasks_done">Done — %d</string>
     <string name="info_button">Info button</string>
     <string name="importance_indicator">Importance indicator</string>
     <string name="add_new">New task</string>
@@ -13,6 +13,4 @@
     <string name="importance_high">High</string>
     <string name="do_before">Do before</string>
     <string name="delete">Delete</string>
-<!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
