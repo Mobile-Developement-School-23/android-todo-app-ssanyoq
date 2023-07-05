@@ -2,6 +2,7 @@ package com.example.yatodo.recycler
 
 import android.content.res.ColorStateList
 import android.graphics.Paint
+import android.util.Log
 import android.view.View
 import android.widget.CheckBox
 import android.widget.ImageButton
@@ -28,6 +29,13 @@ class TodoItemViewHolder(
     private val infoButton: ImageButton = itemView.findViewById(R.id.info_button)
 
     fun onBind(todoItem: TodoItem) {
+        Log.d("view-holder", "---------------")
+        Log.d("view-holder", "New item: ")
+        Log.d("view-holder", "importance: " + todoItem.importance.toString())
+        Log.d("view-holder", "is completed: " + todoItem.isCompleted.toString())
+        Log.d("view-holder", "id: " + todoItem.taskId)
+        Log.d("view-holder", "name: " + todoItem.text)
+        Log.d("view-holder", "---------------")
         when (todoItem.importance) {
             Importance.LOW -> {
                 importanceIndicator.setImageDrawable(
@@ -40,6 +48,7 @@ class TodoItemViewHolder(
 
             Importance.COMMON -> {
                 // No drawables, just empty space
+                importanceIndicator.setImageDrawable(null)
             }
 
             Importance.HIGH -> {
@@ -69,6 +78,8 @@ class TodoItemViewHolder(
 
         if (checkBox.isChecked) {
             taskDescription.paintFlags = (Paint.STRIKE_THRU_TEXT_FLAG)
+        } else {
+            taskDescription.paintFlags = 0
         }
 
         if (todoItem.deadline == null) {
