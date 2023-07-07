@@ -6,30 +6,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.appcompat.content.res.AppCompatResources
 import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
-import com.example.yatodo.R
 import com.example.yatodo.App
+import com.example.yatodo.R
 import com.example.yatodo.components.FragmentMainComponent
 import com.example.yatodo.components.FragmentMainViewComponent
 import com.example.yatodo.data.InteractionType
 import com.example.yatodo.data.TodoItem
-import com.example.yatodo.data.TodoItemsRepository
-import com.example.yatodo.recycler.TodoItemAdapter
 import com.example.yatodo.viewmodel.TodoItemsViewModel
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.imageview.ShapeableImageView
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class FragmentMain : Fragment() {
     private val applicationComponent
@@ -74,36 +67,48 @@ class FragmentMain : Fragment() {
             statusLabel.text = getString(R.string.tasks_done, viewModel.countDone())
         }
 
-        val appBarLayout = view.findViewById<AppBarLayout>(R.id.app_bar_layout)
-        val motionLayout = view.findViewById<MotionLayout>(R.id.toolbar)
+        handleAppBarLayout()
+        // New item button handling
+        handleAddButton()
+
+        setFragmentResultListener("task_fragment") { key, bundle ->
+            handleTaskFragments(bundle)
+        }
+    }
+
+    fun handleAppBarLayout() {
+        val appBarLayout = view?.findViewById<AppBarLayout>(R.id.app_bar_layout)
+        val motionLayout = view?.findViewById<MotionLayout>(R.id.toolbar)
         appBarLayout?.addOnOffsetChangedListener { _, verticalOffset ->
             val seekPosition = -verticalOffset / appBarLayout.totalScrollRange.toFloat()
             if (motionLayout != null) {
                 motionLayout.progress = seekPosition
             }
         }
-        // New item button handling
-        val newItemButton = view.findViewById<FloatingActionButton>(R.id.new_item_button)
-        newItemButton.setOnClickListener {
+    }
+
+    fun handleAddButton() {
+        val newItemButton = view?.findViewById<FloatingActionButton>(R.id.new_item_button)
+        newItemButton?.setOnClickListener {
             this.findNavController()
                 .navigate(
                     R.id.action_main_to_task_fragment,
                     bundleOf("todo_item" to null)
                 )
         }
-        setFragmentResultListener("task_fragment") { key, bundle ->
+    }
 
-            viewModel.viewModelScope.launch {
-                val todoItem = bundle.getParcelable<TodoItem>("todo_item")
-                val interactionType = bundle.getSerializable("interaction_type")
-                if (todoItem != null) {
-                    when (interactionType) {
-                        InteractionType.AddItem -> viewModel.addItem(todoItem)
-                        InteractionType.DeleteItem -> viewModel.deleteItem(todoItem)
-                        InteractionType.ChangeItem -> viewModel.changeItem(todoItem)
-                        InteractionType.Nothing -> {}
-                        else -> Log.w("FragmentMain", "Unexpected FragmentResult, be careful")
-                    }
+    fun handleTaskFragments(bundle: Bundle) {
+        viewModel.viewModelScope.launch {
+            val todoItem = bundle.getParcelable<TodoItem>("todo_item")
+            val interactionType = bundle.getSerializable("interaction_type")
+            if (todoItem != null) {
+                when (interactionType) {
+                    InteractionType.AddItem -> viewModel.addItem(todoItem)
+                    InteractionType.DeleteItem -> viewModel.deleteItem(todoItem)
+                    InteractionType.ChangeItem -> viewModel.changeItem(todoItem)
+                    InteractionType.Nothing -> {}
+                    else -> Log.w("FragmentMain", "Unexpected FragmentResult, be careful")
                 }
             }
         }
