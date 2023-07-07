@@ -27,8 +27,7 @@ class TodoItemsViewModel(private val todoItemsRepository: TodoItemsRepository) :
     fun onItemOpened(todoItem: TodoItem, view: View) {
         Navigation.findNavController(view).navigate(
             R.id.action_main_to_task_fragment, bundleOf(
-                "todo_item" to todoItem,
-                "interaction_type" to InteractionType.ChangeItem
+                "todo_item" to todoItem
             )
         )
     }
