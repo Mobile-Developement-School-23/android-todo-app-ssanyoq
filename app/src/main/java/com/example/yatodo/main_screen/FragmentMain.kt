@@ -36,7 +36,6 @@ class FragmentMain : Fragment() {
         super.onCreate(savedInstanceState)
         fragmentComponent =
             FragmentMainComponent(
-                applicationComponent,
                 viewModel = viewModel,
                 this
             )
@@ -71,12 +70,12 @@ class FragmentMain : Fragment() {
         // New item button handling
         handleAddButton()
 
-        setFragmentResultListener("task_fragment") { key, bundle ->
+        setFragmentResultListener("task_fragment") { _, bundle ->
             handleTaskFragments(bundle)
         }
     }
 
-    fun handleAppBarLayout() {
+    private fun handleAppBarLayout() {
         val appBarLayout = view?.findViewById<AppBarLayout>(R.id.app_bar_layout)
         val motionLayout = view?.findViewById<MotionLayout>(R.id.toolbar)
         appBarLayout?.addOnOffsetChangedListener { _, verticalOffset ->
@@ -87,7 +86,7 @@ class FragmentMain : Fragment() {
         }
     }
 
-    fun handleAddButton() {
+    private fun handleAddButton() {
         val newItemButton = view?.findViewById<FloatingActionButton>(R.id.new_item_button)
         newItemButton?.setOnClickListener {
             this.findNavController()
@@ -98,7 +97,7 @@ class FragmentMain : Fragment() {
         }
     }
 
-    fun handleTaskFragments(bundle: Bundle) {
+    private fun handleTaskFragments(bundle: Bundle) {
         viewModel.viewModelScope.launch {
             val todoItem = bundle.getParcelable<TodoItem>("todo_item")
             val interactionType = bundle.getSerializable("interaction_type")
