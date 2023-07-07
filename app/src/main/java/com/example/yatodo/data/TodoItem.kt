@@ -1,15 +1,19 @@
 package com.example.yatodo.data
 
-import android.os.Parcel
 import android.os.Parcelable
+import com.example.yatodo.R
 import kotlinx.parcelize.Parcelize
-import java.lang.IllegalArgumentException
-import java.util.Calendar
 import java.util.Date
 
 enum class Importance {
     LOW, COMMON, HIGH
 }
+fun Importance.stringId() =
+    when (this) {
+        Importance.COMMON -> R.string.importance_none
+        Importance.HIGH -> R.string.importance_high
+        Importance.LOW -> R.string.importance_low
+    }
 @Parcelize
 data class TodoItem(
     var taskId: String,
