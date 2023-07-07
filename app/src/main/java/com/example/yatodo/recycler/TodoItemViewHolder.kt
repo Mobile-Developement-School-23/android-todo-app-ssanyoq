@@ -71,7 +71,7 @@ class TodoItemViewHolder(
             viewModel.onItemChecked(todoItem, checkBox.isChecked)
         }
         infoButton.setOnClickListener {
-            viewModel.onItemOpened(todoItem)
+            viewModel.onItemOpened(todoItem, itemView)
         }
         taskDescription.text = todoItem.text
         checkBox.isChecked = todoItem.isCompleted
