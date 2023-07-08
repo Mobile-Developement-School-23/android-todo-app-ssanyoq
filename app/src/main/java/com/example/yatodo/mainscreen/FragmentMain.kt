@@ -1,11 +1,13 @@
-package com.example.yatodo.main_screen
+package com.example.yatodo.mainscreen
 
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -58,23 +60,30 @@ class FragmentMain : Fragment() {
         return view
     }
 
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // Sets up done items counter
         val statusLabel = view.findViewById<TextView>(R.id.helper_text)
         viewModel.viewModelScope.launch {
             statusLabel.text = getString(R.string.tasks_done, viewModel.countDone())
         }
 
+        // Hiding app bar handling
         handleAppBarLayout()
         // New item button handling
         handleAddButton()
 
+        // Gets result from closed fragments(TaskFragment)
         setFragmentResultListener("task_fragment") { _, bundle ->
             handleTaskFragments(bundle)
         }
     }
 
+    /**
+     * Function for proper AppBar work
+     */
     private fun handleAppBarLayout() {
         val appBarLayout = view?.findViewById<AppBarLayout>(R.id.app_bar_layout)
         val motionLayout = view?.findViewById<MotionLayout>(R.id.toolbar)
@@ -86,6 +95,9 @@ class FragmentMain : Fragment() {
         }
     }
 
+    /**
+     * Sets listener for add button and sends to TaskFragment on click
+     */
     private fun handleAddButton() {
         val newItemButton = view?.findViewById<FloatingActionButton>(R.id.new_item_button)
         newItemButton?.setOnClickListener {
@@ -97,10 +109,16 @@ class FragmentMain : Fragment() {
         }
     }
 
+    /**
+     * Processes [bundle] from freshly closed TaskFragment, removes, adds or changes
+     * elements according to it
+     */
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private fun handleTaskFragments(bundle: Bundle) {
         viewModel.viewModelScope.launch {
-            val todoItem = bundle.getParcelable<TodoItem>("todo_item")
-            val interactionType = bundle.getSerializable("interaction_type")
+            val todoItem = bundle.getParcelable("todo_item", TodoItem::class.java)
+            val interactionType =
+                bundle.getSerializable("interaction_type", InteractionType::class.java)
             if (todoItem != null) {
                 when (interactionType) {
                     InteractionType.AddItem -> viewModel.addItem(todoItem)
@@ -108,11 +126,15 @@ class FragmentMain : Fragment() {
                     InteractionType.ChangeItem -> viewModel.changeItem(todoItem)
                     InteractionType.Nothing -> {}
                     else -> Log.w("FragmentMain", "Unexpected FragmentResult, be careful")
+                    // ^impossible outcome, but just in case
                 }
             }
         }
     }
 
+    /**
+     * Saves our lives from memory leaks
+     */
     override fun onDestroyView() {
         super.onDestroyView()
         fragmentViewComponent = null
