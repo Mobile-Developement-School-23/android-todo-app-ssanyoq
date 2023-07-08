@@ -1,4 +1,4 @@
-package com.example.yatodo.task_screen
+package com.example.yatodo.taskscreen
 
 import android.os.Bundle
 import android.text.SpannableString
@@ -37,7 +37,6 @@ class TaskFragment : Fragment(R.layout.task_fragment) {
         val importancePopup = view.findViewById<TextView>(R.id.popup_button)
         val datePickerIndicator = view.findViewById<TextView>(R.id.datepicker_indicator)
         val datePickerButton = view.findViewById<SwitchCompat>(R.id.toggle_date_button)
-
         val saveButton = view.findViewById<MaterialButton>(R.id.save_button)
         val deleteButton = view.findViewById<ConstraintLayout>(R.id.delete_layout)
 
@@ -55,11 +54,6 @@ class TaskFragment : Fragment(R.layout.task_fragment) {
         importancePopup.setOnClickListener {
             onImportancePopupPress()
         }
-
-        // Date picker construction
-
-
-        // Date picker call
 
         datePickerButton.setOnClickListener { button ->
             onDatePickerButtonPress(button)
@@ -89,6 +83,9 @@ class TaskFragment : Fragment(R.layout.task_fragment) {
         return sdf.format(date)
     }
 
+    /**
+     * Handles save button presses
+     */
     private fun onSaveButtonPress() {
         val taskDescription = view?.findViewById<EditText>(R.id.task_description)
         taskFragmentComponent.taskText = taskDescription?.text.toString()
@@ -101,6 +98,10 @@ class TaskFragment : Fragment(R.layout.task_fragment) {
         setResultAndPop(newItem, interaction)
     }
 
+    /**
+     * Opens `MaterialDatePicker` on [button] press. Unpresses [button] if calendar was dismissed,
+     * sets value in `taskFragmentComponent` and in TextView
+     */
     private fun onDatePickerButtonPress(button: View?) {
         button as SwitchCompat
         val constraintsBuilder = CalendarConstraints.Builder()
@@ -133,6 +134,10 @@ class TaskFragment : Fragment(R.layout.task_fragment) {
         }
     }
 
+    /**
+     * Draws popup menu and handles presses by changing text
+     * of closed popup and by changing field in `taskFragmentComponent`
+     */
     private fun onImportancePopupPress() {
         val importancePopup = view?.findViewById<TextView>(R.id.popup_button)
         val popupMenu = PopupMenu(this.requireContext(), importancePopup)
@@ -175,6 +180,13 @@ class TaskFragment : Fragment(R.layout.task_fragment) {
         popupMenu.show()
     }
 
+    /**
+     * Shortcut for quitting Fragment. Sets fragment result with following and pops back stack:
+     *
+     * `requestKey = "task_fragmnent"`,
+     * `result` = bundleOf("todo_item" to [todoItem], "interaction_type" to [interactionType]
+     *
+     */
     private fun setResultAndPop(todoItem: TodoItem?, interactionType: InteractionType) {
         setFragmentResult(
             "task_fragment", bundleOf(
