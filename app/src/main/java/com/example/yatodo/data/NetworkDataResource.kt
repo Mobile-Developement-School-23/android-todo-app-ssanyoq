@@ -2,9 +2,13 @@ package com.example.yatodo.data
 
 import android.icu.util.Calendar
 import kotlinx.coroutines.delay
+import javax.inject.Singleton
 
-class NetworkDataResource {
-    val calendar = Calendar.getInstance()
+/**
+ * Temporary dummy network class
+ */
+@Singleton class NetworkDataResource {
+    private val calendar: Calendar = Calendar.getInstance()
     private val data = listOf(
         TodoItem(
             taskId = "aaa",
@@ -23,7 +27,8 @@ class NetworkDataResource {
             importance = Importance.COMMON, modifiedAt = null
         ), TodoItem(
             taskId = "ddd",
-            text = "Some really really really really really really really really really really really really really really really really really really long text",
+            text = "Some really really really really really really really really really" +
+                    "really really really really really really really really really long text",
             isCompleted = false,
             createdAt = calendar.time,
             deadline = calendar.time,
@@ -48,7 +53,9 @@ class NetworkDataResource {
     )
 
     suspend fun loadTasks():List<TodoItem> {
-        delay(10)
+        @Suppress("MagicNumber")
+        val time = 10L
+        delay(time)
         return data
     }
 }

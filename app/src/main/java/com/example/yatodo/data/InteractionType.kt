@@ -1,10 +1,12 @@
 package com.example.yatodo.data
 
-import kotlinx.parcelize.Parcelize
 
+/**
+ * Enum class for easier transition between `TaskFragment` and `FragmentMain`
+ */
 enum class InteractionType {
-    AddItem, // for main -> task only
-    ChangeItem, // for both main -> task and task -> main
-    DeleteItem, // for task -> main only
-    Nothing // for task -> main only
+    AddItem, // if you want to add new item
+    ChangeItem, // if you want to change item
+    DeleteItem, // if you want to delete existing item
+    Nothing // if new item is deleted or task fragment is closed
 }

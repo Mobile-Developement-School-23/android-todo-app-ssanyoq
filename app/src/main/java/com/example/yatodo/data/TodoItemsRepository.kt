@@ -1,31 +1,25 @@
 package com.example.yatodo.data
 
-import android.icu.util.Calendar
 import androidx.annotation.MainThread
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
+import javax.inject.Singleton
 
 
-class TodoItemsRepository(private val dataSource: NetworkDataResource)
-{
+/**
+ * Repository of `TodoItem`s. When initialized tries to get data from [dataSource].
+ * TodoItems are stored in `LiveData`
+ *
+ * Most operations are done in background threads
+ */
+@Singleton
+class TodoItemsRepository @Inject constructor(private val dataSource: NetworkDataResource) {
     private var _todoItemsList = MutableLiveData<List<TodoItem>>(emptyList())
 
     val todoItemsList: LiveData<List<TodoItem>> = _todoItemsList
-
-
-    fun getItemById(id: String?): TodoItem? {
-        if (id == null) {
-            return null
-        }
-        for (i in 0 until (todoItemsList.value?.size!!)) {
-            if (todoItemsList.value?.get(i)?.taskId == id) {
-                return todoItemsList.value?.get(i)
-            }
-        }
-        return null
-    }
 
     /**
      * Changes value of `isChecked` of `TodoItem` with id [taskId] to [isChecked].
@@ -39,28 +33,33 @@ class TodoItemsRepository(private val dataSource: NetworkDataResource)
         _todoItemsList.value = newItems
     }
 
+    /**
+     * Changes `TodoItem` from repo with [taskId] to a new [newItem]. [newItem]'s
+     * `taskId` is changed to a new one just in case
+     */
     suspend fun changeItemById(taskId: String, newItem: TodoItem) {
         val newItems = withContext(Dispatchers.Default) {
             newItem.taskId = taskId // just in case
             todoItemsList.value.orEmpty()
-                .map {item -> if (item.taskId == taskId) newItem else item}
+                .map { item -> if (item.taskId == taskId) newItem else item }
         }
         _todoItemsList.value = newItems
     }
 
 
     /**
-     * Deletes `TodoItem` with given [taskId]. Nothing will change if there is no item with such id
+     * Deletes `TodoItem` with given [taskId]. Nothing will be
+     * changed if there is no item with such id
      */
     suspend fun deleteItemById(taskId: String) {
         val newItems = withContext(Dispatchers.Default) {
-            todoItemsList.value.orEmpty().filter { it -> it.taskId != taskId }
+            todoItemsList.value.orEmpty().filter { it.taskId != taskId }
         }
         _todoItemsList.value = newItems
     }
 
     /**
-    * Adds [todoItem] and generates `taskId` for it (equals `size.toString()`)
+     * Adds [todoItem] and generates `taskId` for it (equals `size.toString()`)
      */
     suspend fun addItem(todoItem: TodoItem?) {
         if (todoItem == null) {
@@ -72,6 +71,10 @@ class TodoItemsRepository(private val dataSource: NetworkDataResource)
         }
         _todoItemsList.value = newItems
     }
+
+    /**
+     * Counts how many `TodoItem`s have `isCompleted == true`
+     */
     @MainThread
     suspend fun countDone(): Int {
         val doneAmount = withContext(Dispatchers.Default) {
@@ -82,65 +85,7 @@ class TodoItemsRepository(private val dataSource: NetworkDataResource)
 
     @MainThread
     suspend fun updateTodoItems() {
-        val loadedData = withContext(Dispatchers.IO) {dataSource.loadTasks()}
+        val loadedData = withContext(Dispatchers.IO) { dataSource.loadTasks() }
         _todoItemsList.value = loadedData
-    }
-
-
-
-    suspend fun generate() {
-        val calendar = Calendar.getInstance()
-        val i1 = TodoItem(
-            taskId = "aaa",
-            text = "Some text but completed", isCompleted = true,
-            createdAt = calendar.time, deadline = calendar.time,
-            importance = Importance.LOW, modifiedAt = null
-        )
-        val i2 = TodoItem(
-            taskId = "bbb",
-            text = "Some text but with no deadline date", isCompleted = true,
-            createdAt = calendar.time, deadline = null,
-            importance = Importance.HIGH, modifiedAt = null
-        )
-        val i3 = TodoItem(
-            taskId = "c",
-            text = "Some text but with \nthese \nthings", isCompleted = false,
-            createdAt = calendar.time, deadline = calendar.time,
-            importance = Importance.COMMON, modifiedAt = null
-        )
-        val i4 = TodoItem(
-            taskId = "ddd",
-            text = "Some really really really really really really really really really really really really really really really really really really long text",
-            isCompleted = false,
-            createdAt = calendar.time,
-            deadline = calendar.time,
-            importance = Importance.HIGH,
-            modifiedAt = null
-        )
-        val i5 = TodoItem(
-            taskId = "eee",
-            text = "Please", isCompleted = false,
-            createdAt = calendar.time, deadline = calendar.time,
-            importance = Importance.LOW, modifiedAt = null
-        )
-        val i6 = TodoItem(
-            taskId = "fff",
-            text = "It's 3AM", isCompleted = false,
-            createdAt = calendar.time, deadline = calendar.time,
-            importance = Importance.COMMON, modifiedAt = null
-        )
-        val i7 = TodoItem(
-            taskId = "ggg",
-            text = "Help me", isCompleted = false,
-            createdAt = calendar.time, deadline = calendar.time,
-            importance = Importance.HIGH, modifiedAt = null
-        )
-        addItem(i1)
-        addItem(i2)
-        addItem(i3)
-        addItem(i4)
-        addItem(i5)
-        addItem(i6)
-        addItem(i7)
     }
 }
