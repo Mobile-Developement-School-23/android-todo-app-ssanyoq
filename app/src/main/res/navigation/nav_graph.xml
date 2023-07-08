@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/fragmentMain"
-        android:name="com.example.yatodo.main_screen.FragmentMain"
+        android:name="com.example.yatodo.mainscreen.FragmentMain"
         android:label="FragmentMain" >
         <action
             android:id="@+id/action_main_to_task_fragment"
@@ -21,7 +21,7 @@
     </fragment>
     <fragment
         android:id="@+id/taskFragment"
-        android:name="com.example.yatodo.TaskFragment"
+        android:name="com.example.yatodo.taskscreen.TaskFragment"
         android:label="taskFragment" >
     </fragment>
 
