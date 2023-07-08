@@ -6,7 +6,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.core.os.bundleOf
@@ -55,7 +54,7 @@ class FragmentMain : Fragment() {
             view,
             viewLifecycleOwner
         ).apply {
-            todoItemsController.setUpViews()
+            todoItemsController.setUpViews(getString(R.string.tasks_done))
         }
         return view
     }
@@ -63,12 +62,6 @@ class FragmentMain : Fragment() {
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        // Sets up done items counter
-        val statusLabel = view.findViewById<TextView>(R.id.helper_text)
-        viewModel.viewModelScope.launch {
-            statusLabel.text = getString(R.string.tasks_done, viewModel.countDone())
-        }
 
         // Hiding app bar handling
         handleAppBarLayout()
