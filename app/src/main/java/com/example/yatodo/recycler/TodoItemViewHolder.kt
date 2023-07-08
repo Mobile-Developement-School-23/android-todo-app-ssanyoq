@@ -2,7 +2,6 @@ package com.example.yatodo.recycler
 
 import android.content.res.ColorStateList
 import android.graphics.Paint
-import android.util.Log
 import android.view.View
 import android.widget.CheckBox
 import android.widget.ImageButton
@@ -28,14 +27,13 @@ class TodoItemViewHolder(
     private val deadLineDate: TextView = itemView.findViewById(R.id.deadline_date)
     private val infoButton: ImageButton = itemView.findViewById(R.id.info_button)
 
+    /**
+     * Binds data to views: changes `importanceIndicator`s, `taskDescription`, `checkBox` and makes
+     * `taskDescription` strikethrough if [todoItem]`.isCompleted`, sets listeners to `checkBox` and `infoButton`
+     *
+     * writes date if [todoItem]`.deadlineDate != null`
+     */
     fun onBind(todoItem: TodoItem) {
-        Log.d("view-holder", "---------------")
-        Log.d("view-holder", "New item: ")
-        Log.d("view-holder", "importance: " + todoItem.importance.toString())
-        Log.d("view-holder", "is completed: " + todoItem.isCompleted.toString())
-        Log.d("view-holder", "id: " + todoItem.taskId)
-        Log.d("view-holder", "name: " + todoItem.text)
-        Log.d("view-holder", "---------------")
         when (todoItem.importance) {
             Importance.LOW -> {
                 importanceIndicator.setImageDrawable(
@@ -84,7 +82,9 @@ class TodoItemViewHolder(
 
         if (todoItem.deadline == null) {
             deadLineDate.visibility = View.GONE
+            deadLineDate.text = ""
         } else {
+            deadLineDate.visibility = View.VISIBLE
             val sdf = SimpleDateFormat("dd.MM.yyyy", Locale.US)
             deadLineDate.text = sdf.format(todoItem.deadline!!)
         }
