@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Base.TextAppearance.AppCompat.Title.Large">
+        <item name="android:textSize">32sp</item>
+        <item name="android:lineHeight">38sp</item>
+    </style>
+    <style name="Base.TextAppearance.AppCompat.Title">
+        <item name="android:textSize">20sp</item>
+        <item name="android:lineHeight">32sp</item>
+    </style>
+    <style name="Base.TextAppearance.AppCompat.Button">
+        <item name="android:textSize">14sp</item>
+        <item name="android:lineHeight">24sp</item>
+    </style>
+    <style name="Base.TextAppearance.AppCompat.Body">
+        <item name="android:textSize">16sp</item>
+        <item name="android:lineHeight">20sp</item>
+    </style>
+    <style name="Base.TextAppearance.AppCompat.SubHead">
+        <item name="android:textSize">14sp</item>
+        <item name="android:lineHeight">20sp</item>
+    </style>
+</resources>
