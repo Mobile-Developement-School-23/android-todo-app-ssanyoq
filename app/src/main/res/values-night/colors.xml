@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="white">#FFFFFFFF</color>
-    <color name="red">#FF453A</color>
-    <color name="green">#32D74B</color>
-    <color name="blue">#0A84FF</color>
+<!--    <color name="white">#FFFFFFFF</color>-->
+    <color name="red">@color/brighter_red</color>
+    <color name="green">@color/brighter_green</color>
+    <color name="blue">@color/brighter_blue</color>
     <color name="gray">#8E8E93</color>
-    <color name="gray_light">#48484A</color>
-    <color name="separator">#FFFFFF</color> <!-- 20%  -->
-    <color name="overlay">#000000</color> <!--32%  -->
-    <color name="label">#FFFFFF</color>
-    <color name="back_primary">#161618</color>
-    <color name="back_secondary">#252528</color>
-    <color name="back_elevated">#3C3C3F</color>
+    <color name="gray_light">@color/light_grey</color>
+    <color name="separator">@color/white</color> <!-- 20%  -->
+    <color name="overlay">@color/white</color> <!--32%  -->
+    <color name="label">@color/white</color>
+    <color name="back_primary">@color/darkest_grey</color>
+    <color name="back_secondary">@color/darker_grey</color>
+    <color name="back_elevated">@color/elevated_grey</color>
 </resources>

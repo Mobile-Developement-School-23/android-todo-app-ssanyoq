@@ -1,18 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="white">#FFFFFFFF</color>
-    <color name="red">#FF3B30</color>
-    <color name="green">#34C759</color>
-    <color name="blue">#007AFF</color>
+<!--    <color name="white">#FFFFFFFF</color>-->
+    <color name="red">@color/darker_red</color>
+    <color name="green">@color/darker_green</color>
+    <color name="blue">@color/darker_blue</color>
     <color name="gray">#8E8E93</color>
-    <color name="gray_light">#D1D1D6</color>
-    <color name="separator">#000000</color> <!-- 33%  -->
-    <color name="overlay">#000000</color> <!-- 6%  -->
-    <color name="label">#000000</color>
-    <color name="back_primary">#F7F6F2</color>
-    <color name="back_secondary">#FFFFFF</color>
-    <color name="back_elevated">#FFFFFF</color>
-
-
-
+    <color name="gray_light">@color/light_grey</color>
+    <color name="separator">@color/black</color> <!-- 33%  -->
+    <color name="overlay">@color/black</color> <!-- 6%  -->
+    <color name="label">@color/black</color>
+    <color name="back_primary">@color/yellowish_grey</color>
+    <color name="back_secondary">@color/white</color>
+    <color name="back_elevated">@color/white</color>
 </resources>

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/motion_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -22,6 +21,7 @@
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/main_text"
+        style="@style/Base.TextAppearance.AppCompat.Title.Large"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
@@ -35,6 +35,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.appcompat.widget.AppCompatTextView
+        style="@style/Base.TextAppearance.AppCompat.Title"
         android:id="@+id/helper_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
