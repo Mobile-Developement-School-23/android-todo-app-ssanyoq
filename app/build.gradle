@@ -16,7 +16,7 @@ android {
 
     defaultConfig {
         applicationId "com.example.yatodo"
-        minSdk 29
+        minSdk 33 // FIXME
         targetSdk 33
         versionCode 1
         versionName "1.0"
@@ -30,6 +30,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         debug {
+            minifyEnabled false
             debuggable true
         }
     }
