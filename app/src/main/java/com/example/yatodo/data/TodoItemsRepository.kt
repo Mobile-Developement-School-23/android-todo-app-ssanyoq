@@ -57,8 +57,7 @@ class TodoItemsRepository @Inject constructor(private val dataSource: NetworkDat
             todoItemsList.value.orEmpty().filter { it.taskId != taskId }
         }
         _todoItemsList.value = newItems
-        _todoItemsList.value = listOf()
-        Log.i("Items", "Item deleted. New length is " + todoItemsList.value?.size.toString())
+
     }
 
     /**
