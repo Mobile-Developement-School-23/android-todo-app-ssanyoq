@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import com.example.yatodo.App
 import com.example.yatodo.R
@@ -94,11 +95,13 @@ class FragmentMain : Fragment() {
     private fun handleAddButton() {
         val newItemButton = view?.findViewById<FloatingActionButton>(R.id.new_item_button)
         newItemButton?.setOnClickListener {
-            this.findNavController()
-                .navigate(
-                    R.id.action_main_to_task_fragment,
-                    bundleOf("todo_item" to null)
-                )
+            val action = FragmentMainDirections.actionMainToTaskFragment(null)
+            findNavController().navigate(action)
+//            this.findNavController()
+//                .navigate(
+//                    R.id.action_main_to_task_fragment,
+//                    bundleOf("todo_item" to null)
+//                ) // TODO delete
         }
     }
 
@@ -112,6 +115,7 @@ class FragmentMain : Fragment() {
             val todoItem = bundle.getParcelable("todo_item", TodoItem::class.java)
             val interactionType =
                 bundle.getSerializable("interaction_type", InteractionType::class.java)
+            Log.i("Items", "got there with " + interactionType.toString())
             if (todoItem != null) {
                 when (interactionType) {
                     InteractionType.AddItem -> viewModel.addItem(todoItem)
@@ -121,6 +125,8 @@ class FragmentMain : Fragment() {
                     else -> Log.w("FragmentMain", "Unexpected FragmentResult, be careful")
                     // ^impossible outcome, but just in case
                 }
+            } else {
+                Log.i("Items", "Todo item is null:(")
             }
         }
     }

@@ -14,6 +14,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
+import androidx.navigation.fragment.navArgs
 import com.example.yatodo.R
 import com.example.yatodo.components.TaskFragmentComponent
 import com.example.yatodo.data.Importance
@@ -30,7 +31,8 @@ import java.util.Locale
 
 class TaskFragment : Fragment(R.layout.task_fragment) {
 
-    private val taskFragmentComponent = TaskFragmentComponent(arguments)
+    private val args by navArgs<TaskFragmentArgs>()
+    private val taskFragmentComponent by lazy { TaskFragmentComponent(args) }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val closeButton = view.findViewById<FloatingActionButton>(R.id.close_button)
@@ -45,7 +47,7 @@ class TaskFragment : Fragment(R.layout.task_fragment) {
             setResultAndPop(null, InteractionType.Nothing)
         }
         deleteButton.setOnClickListener {
-            setResultAndPop(taskFragmentComponent.todoItem, InteractionType.DeleteItem)
+            onDeleteButtonPress()
         }
         saveButton.setOnClickListener {
             onSaveButtonPress()
@@ -63,17 +65,17 @@ class TaskFragment : Fragment(R.layout.task_fragment) {
         val taskDescription = view.findViewById<EditText>(R.id.task_description)
         if (taskFragmentComponent.todoItem != null) {
             taskDescription.setText(
-                taskFragmentComponent.todoItem.text,
+                taskFragmentComponent.todoItem!!.text,
                 TextView.BufferType.EDITABLE
             )
-            importancePopup.text = getString(taskFragmentComponent.todoItem.importance.stringId())
-            if (taskFragmentComponent.todoItem.deadline != null) {
+            importancePopup.text = getString(taskFragmentComponent.todoItem!!.importance.stringId())
+            if (taskFragmentComponent.todoItem!!.deadline != null) {
                 datePickerButton.isChecked = true
-                datePickerIndicator.text = setDate(taskFragmentComponent.todoItem.deadline!!)
+                datePickerIndicator.text = setDate(taskFragmentComponent.todoItem!!.deadline!!)
             }
 
-            taskFragmentComponent.importance = taskFragmentComponent.todoItem.importance
-            taskFragmentComponent.pickedDate = taskFragmentComponent.todoItem.deadline
+            taskFragmentComponent.importance = taskFragmentComponent.todoItem!!.importance
+            taskFragmentComponent.pickedDate = taskFragmentComponent.todoItem!!.deadline
 
         }
     }
@@ -92,10 +94,17 @@ class TaskFragment : Fragment(R.layout.task_fragment) {
         val newItem = taskFragmentComponent.composeTodoItem()
         var interaction = InteractionType.AddItem
         if (taskFragmentComponent.todoItem != null) {
-            newItem?.taskId = taskFragmentComponent.todoItem.taskId
+            newItem?.taskId = taskFragmentComponent.todoItem!!.taskId
             interaction = InteractionType.ChangeItem
         }
         setResultAndPop(newItem, interaction)
+    }
+
+    private fun onDeleteButtonPress() {
+        setResultAndPop(
+            taskFragmentComponent.composeTodoItem(true),
+            InteractionType.DeleteItem
+        )
     }
 
     /**

@@ -1,13 +1,16 @@
 package com.example.yatodo.viewmodel
 
+import android.util.Log
 import android.view.View
 import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.Navigation
+import androidx.navigation.findNavController
 import com.example.yatodo.R
 import com.example.yatodo.data.TodoItem
 import com.example.yatodo.data.TodoItemsRepository
+import com.example.yatodo.mainscreen.FragmentMainDirections
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -34,11 +37,13 @@ class TodoItemsViewModel @Inject constructor(private val todoItemsRepository: To
      * Usually called by pressing info buttons in recycler view
      */
     fun onItemOpened(todoItem: TodoItem, view: View) {
-        Navigation.findNavController(view).navigate(
-            R.id.action_main_to_task_fragment, bundleOf(
-                "todo_item" to todoItem
-            )
-        )
+        val action = FragmentMainDirections.actionMainToTaskFragment(todoItem)
+        view.findNavController().navigate(action)
+//        Navigation.findNavController(view).navigate(
+//            R.id.action_main_to_task_fragment, bundleOf(
+//                "todo_item" to todoItem
+//            ) TODO delete
+//        )
     }
 
     /**
@@ -79,6 +84,7 @@ class TodoItemsViewModel @Inject constructor(private val todoItemsRepository: To
      * Calls `todoItemsRepository` `deleteItem` method for [todoItem]
      */
     suspend fun deleteItem(todoItem: TodoItem) {
+        Log.i("Items", "In progress @ viewmodel, taskid:" + todoItem.taskId)
         todoItemsRepository.deleteItemById(todoItem.taskId)
     }
 }

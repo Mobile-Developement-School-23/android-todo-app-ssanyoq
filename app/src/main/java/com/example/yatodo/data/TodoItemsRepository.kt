@@ -1,5 +1,6 @@
 package com.example.yatodo.data
 
+import android.util.Log
 import androidx.annotation.MainThread
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -56,6 +57,8 @@ class TodoItemsRepository @Inject constructor(private val dataSource: NetworkDat
             todoItemsList.value.orEmpty().filter { it.taskId != taskId }
         }
         _todoItemsList.value = newItems
+        _todoItemsList.value = listOf()
+        Log.i("Items", "Item deleted. New length is " + todoItemsList.value?.size.toString())
     }
 
     /**
@@ -70,6 +73,7 @@ class TodoItemsRepository @Inject constructor(private val dataSource: NetworkDat
             todoItemsList.value.orEmpty().plus(todoItem)
         }
         _todoItemsList.value = newItems
+        Log.i("Items", "Item added. New length is " + todoItemsList.value?.size.toString())
     }
 
     /**
