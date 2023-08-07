@@ -7,6 +7,10 @@ object ApiConstants {
     const val KEY_UPDATE = "update_items"
     const val KEY_DELETE = "delete_items"
 
+    const val LAST_KNOWN_REVISION = "X-Last-Known-Revision"
+
+    const val GENERATE_FAILS = "X-Generate-Fails"
+
 
     const val API_TOKEN = "discussionis" // top secret
 }
