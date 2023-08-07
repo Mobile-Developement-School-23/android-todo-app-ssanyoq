@@ -1,6 +1,15 @@
 package com.example.yatodo.network
 
+import android.util.Log
+import com.example.yatodo.data.TodoItem
+import com.example.yatodo.network.ApiConstants.BASE_URL
 import com.example.yatodo.network.ApiConstants.LAST_KNOWN_REVISION
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import okhttp3.OkHttpClient
+import retrofit2.HttpException
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -62,8 +71,90 @@ interface TodoApi {
      * @return Server response
      */
     @DELETE("list/{id}")
-    suspend fun delete(
+    suspend fun deleteItem(
         @Header(LAST_KNOWN_REVISION) revision: Int,
         @Path("id") id: String
     ): ItemResponse
 }
+
+/**
+ * Implementation of [TodoApi] that uses retrofit.
+ *
+ * catches [HttpException] in case
+ */
+object TodoApiImpl {
+    private val okHttpClient = OkHttpClient().newBuilder().addInterceptor(AuthInterceptor()).build()
+    private val retrofit = Retrofit.Builder().client(okHttpClient)
+        .addConverterFactory(GsonConverterFactory.create())
+        .baseUrl(BASE_URL)
+        .build()
+    private val service = retrofit.create(TodoApi::class.java)
+
+    private var revision = 0
+
+    private suspend fun updateRevision() {
+        val response = withContext(Dispatchers.IO) {
+            service.getList()
+        }
+        revision = response.revision
+    }
+
+    suspend fun getList(): List<TodoItem> {
+        val response = withContext(Dispatchers.IO) {
+            service.getList()
+        }
+        revision = response.revision // same as updateRevision(), but here this is faster
+        return response.list.map { TodoItem(it) }
+    }
+
+    suspend fun updateList(list: List<TodoItem>) {
+        val request = list.map { SerializedTodoItem(it) }
+        withContext(Dispatchers.IO) {
+            service.updateList(revision, ListRequest(request))
+        }
+    }
+
+    suspend fun addItem(todoItem: TodoItem) {
+        updateRevision()
+        try {
+            withContext(Dispatchers.IO) {
+                service.addItem(
+                    revision,
+                    ItemRequest(SerializedTodoItem(todoItem))
+                )
+            }
+        } catch (exception: HttpException) {
+            Log.e("TodoApiImpl", exception.message())
+        }
+    }
+
+    suspend fun updateItem(todoItem: TodoItem) {
+        updateRevision()
+        try {
+            withContext(Dispatchers.IO) {
+                service.updateItem(
+                    revision,
+                    todoItem.taskId,
+                    ItemRequest(SerializedTodoItem(todoItem))
+                )
+            }
+        } catch (exception: HttpException) {
+            Log.e("TodoApiImpl", exception.message())
+        }
+    }
+
+    suspend fun deleteItem(id: String) {
+        updateRevision()
+        try {
+            withContext(Dispatchers.IO) {
+                service.deleteItem(
+                    revision,
+                    id
+                )
+            }
+        } catch (exception: HttpException) {
+            Log.e("TodoApiImpl", exception.message())
+        }
+    }
+}
+
