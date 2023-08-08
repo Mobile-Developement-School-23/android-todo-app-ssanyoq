@@ -33,20 +33,11 @@ data class SerializedTodoItem constructor(
         color = "#FAFAFA",
         lastUpdatedBy = "username"
     )
-
-//    /**
-//     * Composes object to [TodoItem](com.example.yatodo.data.TodoItem)
-//     */
-//    fun composeTodoItem(): TodoItem =
-//        TodoItem(id,
-//            text,
-//            enumFromString(importance),
-//            deadline?.let { Date(it) },
-//            done,
-//            Date(createdAt!!),
-//            changedAt?.let { Date(it) }
-//        ) // TODO delete after testing
-
+    init {
+        if (changedAt == null) {
+            changedAt = createdAt
+        }
+    }
 }
 
 data class ItemResponse(
