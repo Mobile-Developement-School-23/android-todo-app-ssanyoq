@@ -2,12 +2,9 @@ package com.example.yatodo.viewmodel
 
 import android.util.Log
 import android.view.View
-import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.Navigation
 import androidx.navigation.findNavController
-import com.example.yatodo.R
 import com.example.yatodo.data.TodoItem
 import com.example.yatodo.data.TodoItemsRepository
 import com.example.yatodo.mainscreen.FragmentMainDirections
@@ -69,7 +66,7 @@ class TodoItemsViewModel @Inject constructor(private val todoItemsRepository: To
     /**
      * Calls `todoItemsRepository` `addItem` method for [todoItem]
      */
-    suspend fun addItem(todoItem: TodoItem?) {
+    suspend fun addItem(todoItem: TodoItem) {
         todoItemsRepository.addItem(todoItem)
     }
 
