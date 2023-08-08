@@ -7,6 +7,7 @@ import com.example.yatodo.network.ApiConstants.LAST_KNOWN_REVISION
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.HttpException
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -83,7 +84,16 @@ interface TodoApi {
  * catches [HttpException] in case
  */
 object TodoApiImpl {
-    private val okHttpClient = OkHttpClient().newBuilder().addInterceptor(AuthInterceptor()).build()
+
+    // debug
+    private val logging = HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
+
+    private val okHttpClient = OkHttpClient()
+        .newBuilder()
+        .addInterceptor(AuthInterceptor())
+        .addInterceptor(logging)
+        .build()
+
     private val retrofit = Retrofit.Builder().client(okHttpClient)
         .addConverterFactory(GsonConverterFactory.create())
         .baseUrl(BASE_URL)
@@ -155,6 +165,21 @@ object TodoApiImpl {
         } catch (exception: HttpException) {
             Log.e("TodoApiImpl", exception.message())
         }
+    }
+
+    /**
+     * Made solely for easier checking of an item with **`TodoItemsRepository.checkItemById()`**
+     */
+    suspend fun checkItemById(id: String) {
+        updateRevision()
+        try {withContext(Dispatchers.IO) {
+            val response = service.getItem(id)
+            response.element.done = !response.element.done
+            service.updateItem(revision, id, ItemRequest(response.element))
+        }} catch (exception: HttpException) {
+            Log.e("TodoApiImpl", exception.message())
+        }
+
     }
 }
 
