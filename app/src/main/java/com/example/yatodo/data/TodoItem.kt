@@ -1,6 +1,11 @@
 package com.example.yatodo.data
 
 import android.os.Parcelable
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import androidx.room.TypeConverter
+import androidx.room.TypeConverters
 import com.example.yatodo.R
 import com.example.yatodo.network.SerializedTodoItem
 import kotlinx.parcelize.Parcelize
@@ -31,19 +36,7 @@ fun Importance.apiString() =
         Importance.HIGH -> "important"
     }
 
-/**
- * Converts [String] importance to [Importance]
- *
- * Made to work with strings recieved via API:
- *
- * `"low"` -> [Importance.LOW]
- *
- * `"basic"` -> [Importance.COMMON]
- *
- * `"important"` -> [Importance.HIGH]
- *
- * @exception IllegalArgumentException if string differs from strings above
- */
+
 fun enumFromString(string: String): Importance =
     when (string) {
         "low" -> Importance.LOW
@@ -52,15 +45,43 @@ fun enumFromString(string: String): Importance =
         else -> throw IllegalArgumentException("Unable to convert $string into Importance value")
     }
 
+class ImportanceConverter {
+    @TypeConverter
+    fun fromImportance(importance: Importance): String {
+        return when (importance) {
+            Importance.HIGH -> "high"
+            Importance.COMMON -> "basic"
+            Importance.LOW -> "low"
+        }
+    }
+
+    @TypeConverter
+    fun toImportance(string: String): Importance {
+        return when (string) {
+            "high" -> Importance.HIGH
+            "basic" -> Importance.COMMON
+            "low" -> Importance.LOW
+            else -> throw IllegalArgumentException("Unable to convert $string into Importance value")
+        }
+    }
+}
+
+class DateConverter {
+    @TypeConverter
+    fun fromDate(date: Date): Long = date.time
+    @TypeConverter
+    fun toDate(long: Long): Date = Date(long)
+}
 @Parcelize
+@Entity(tableName = "todo_items")
 data class TodoItem constructor(
-    var taskId: String,
-    var text: String,
-    var importance: Importance,
-    var deadline: Date?,
-    var isCompleted: Boolean,
-    var createdAt: Date,
-    var modifiedAt: Date?,
+    @PrimaryKey @ColumnInfo var taskId: String,
+    @ColumnInfo var text: String,
+    @TypeConverters(ImportanceConverter::class) @ColumnInfo var importance: Importance,
+    @ColumnInfo var deadline: Date?,
+    @TypeConverters(DateConverter::class) @ColumnInfo var isCompleted: Boolean,
+    @ColumnInfo var createdAt: Date,
+    @ColumnInfo var modifiedAt: Date?,
 ) : Parcelable {
 
     // For better SerializedTodoItem -> TodoItem conversion
