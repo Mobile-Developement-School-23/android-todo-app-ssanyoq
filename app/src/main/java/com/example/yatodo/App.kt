@@ -5,7 +5,7 @@ import android.content.Context
 import com.example.yatodo.components.ApplicationComponent
 
 class App: Application() {
-    val applicationComponent by lazy { ApplicationComponent() }
+    val applicationComponent by lazy { ApplicationComponent(this) }
 
     companion object {
         /**
