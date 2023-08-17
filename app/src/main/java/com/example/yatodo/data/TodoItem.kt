@@ -68,20 +68,26 @@ class ImportanceConverter {
 
 class DateConverter {
     @TypeConverter
-    fun fromDate(date: Date): Long = date.time
+    fun fromTimestamp(value: Long?): Date? {
+        return value?.let { Date(it) }
+    }
+
     @TypeConverter
-    fun toDate(long: Long): Date = Date(long)
+    fun dateToTimestamp(date: Date?): Long? {
+        return date?.time
+    }
 }
 @Parcelize
 @Entity(tableName = "todo_items")
+@TypeConverters(ImportanceConverter::class, DateConverter::class)
 data class TodoItem constructor(
     @PrimaryKey @ColumnInfo var taskId: String,
     @ColumnInfo var text: String,
     @TypeConverters(ImportanceConverter::class) @ColumnInfo var importance: Importance,
-    @ColumnInfo var deadline: Date?,
-    @TypeConverters(DateConverter::class) @ColumnInfo var isCompleted: Boolean,
-    @ColumnInfo var createdAt: Date,
-    @ColumnInfo var modifiedAt: Date?,
+    @TypeConverters(DateConverter::class) @ColumnInfo var deadline: Date?,
+    @ColumnInfo var isCompleted: Boolean,
+    @TypeConverters(DateConverter::class) @ColumnInfo var createdAt: Date,
+    @TypeConverters(DateConverter::class) @ColumnInfo var modifiedAt: Date?,
 ) : Parcelable {
 
     // For better SerializedTodoItem -> TodoItem conversion
