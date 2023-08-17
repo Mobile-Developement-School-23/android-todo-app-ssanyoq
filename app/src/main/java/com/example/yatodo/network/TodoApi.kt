@@ -19,6 +19,7 @@ import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
+import java.net.UnknownHostException
 
 interface TodoApi {
 
@@ -78,6 +79,16 @@ interface TodoApi {
     ): ItemResponse
 }
 
+
+object ErrorLogs {
+    fun logHttpException(exception: HttpException) {
+        Log.e("TodoApiImpl", exception.message())
+    }
+    fun logUnknownHostException(exception: UnknownHostException) {
+        Log.e("TodoApiImpl", exception.toString())
+    }
+}
+
 /**
  * Implementation of [TodoApi] that uses retrofit.
  *
@@ -103,24 +114,43 @@ object TodoApiImpl {
     private var revision = 0
 
     private suspend fun updateRevision() {
-        val response = withContext(Dispatchers.IO) {
-            service.getList()
+        try {
+            val response = withContext(Dispatchers.IO) {
+                service.getList()
+            }
+            revision = response.revision
+        } catch (exception: HttpException) {
+            ErrorLogs.logHttpException(exception)
+        } catch (exception: UnknownHostException) {
+            ErrorLogs.logUnknownHostException(exception)
         }
-        revision = response.revision
     }
 
     suspend fun getList(): List<TodoItem> {
-        val response = withContext(Dispatchers.IO) {
-            service.getList()
+        try {
+            val response = withContext(Dispatchers.IO) {
+                service.getList()
+            }
+            revision = response.revision // same as updateRevision(), but here this is faster
+            return response.list.map { TodoItem(it) }
+        } catch (exception: HttpException) {
+            ErrorLogs.logHttpException(exception)
+        } catch (exception: UnknownHostException) {
+            ErrorLogs.logUnknownHostException(exception)
         }
-        revision = response.revision // same as updateRevision(), but here this is faster
-        return response.list.map { TodoItem(it) }
+        return listOf()
     }
 
     suspend fun updateList(list: List<TodoItem>) {
         val request = list.map { SerializedTodoItem(it) }
-        withContext(Dispatchers.IO) {
-            service.updateList(revision, ListRequest(request))
+        try {
+            withContext(Dispatchers.IO) {
+                service.updateList(revision, ListRequest(request))
+            }
+        } catch (exception: HttpException) {
+            ErrorLogs.logHttpException(exception)
+        } catch (exception: UnknownHostException) {
+            ErrorLogs.logUnknownHostException(exception)
         }
     }
 
@@ -134,7 +164,9 @@ object TodoApiImpl {
                 )
             }
         } catch (exception: HttpException) {
-            Log.e("TodoApiImpl", exception.message())
+            ErrorLogs.logHttpException(exception)
+        } catch (exception: UnknownHostException) {
+            ErrorLogs.logUnknownHostException(exception)
         }
     }
 
@@ -149,7 +181,9 @@ object TodoApiImpl {
                 )
             }
         } catch (exception: HttpException) {
-            Log.e("TodoApiImpl", exception.message())
+            ErrorLogs.logHttpException(exception)
+        } catch (exception: UnknownHostException) {
+            ErrorLogs.logUnknownHostException(exception)
         }
     }
 
@@ -163,7 +197,9 @@ object TodoApiImpl {
                 )
             }
         } catch (exception: HttpException) {
-            Log.e("TodoApiImpl", exception.message())
+            ErrorLogs.logHttpException(exception)
+        } catch (exception: UnknownHostException) {
+            ErrorLogs.logUnknownHostException(exception)
         }
     }
 
@@ -171,15 +207,19 @@ object TodoApiImpl {
      * Made solely for easier checking of an item with **`TodoItemsRepository.checkItemById()`**
      */
     suspend fun checkItemById(id: String) {
-        updateRevision()
-        try {withContext(Dispatchers.IO) {
-            val response = service.getItem(id)
-            response.element.done = !response.element.done
-            service.updateItem(revision, id, ItemRequest(response.element))
-        }} catch (exception: HttpException) {
-            Log.e("TodoApiImpl", exception.message())
-        }
 
+        updateRevision()
+        try {
+            withContext(Dispatchers.IO) {
+                val response = service.getItem(id)
+                response.element.done = !response.element.done
+                service.updateItem(revision, id, ItemRequest(response.element))
+            }
+        } catch (exception: HttpException) {
+            ErrorLogs.logHttpException(exception)
+        } catch (exception: UnknownHostException) {
+            ErrorLogs.logUnknownHostException(exception)
+        }
     }
 }
 
